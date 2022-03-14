@@ -1,30 +1,17 @@
-FROM python:3.10
-LABEL author='Label A'
+FROM python:3.10-alpine
 
+ENV PYTHONUNBUFFERED 1
+
+COPY ./requirements.txt /requirements.txt
+RUN apk add --update --no-cache postgresql-client jpeg-dev
+RUN apk add --update --no-cache --virtual .tmp-build-deps \
+        gcc libc-dev linux-headers postgresql-dev musl-dev zlib zlib-dev
+RUN pip install -r /requirements.txt
+RUN apk del .tmp-build-deps
+
+RUN mkdir /app
 WORKDIR /app
+COPY . /app
 
-# Environment
-RUN apt-get update
-RUN apt-get install -y bash vim nano postgresql-client
-RUN pip install --upgrade pip
-
-# Major pinned python dependencies
-RUN pip install --no-cache-dir flake8==3.8.4 uWSGI
-
-# Regular Python dependencies
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy our codebase into the container
-COPY . .
-
-RUN ./manage.py collectstatic --noinput
-
-# Ops Parameters
-ENV WORKERS=2
-ENV PORT=80
-ENV PYTHONUNBUFFERED=1
-
-EXPOSE ${PORT}
-
-CMD uwsgi --http :${PORT} --processes ${WORKERS} --static-map /static=/static --module autocompany.wsgi:application
+RUN adduser -D user
+USER user 
