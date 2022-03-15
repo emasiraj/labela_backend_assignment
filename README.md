@@ -18,13 +18,13 @@ LabelA backend assignment. Develop an API according to some user stories within 
 **Api endpoints**
 
 - /api/carparts/
-- /api/carparts/<id>
+- /api/carparts/id
 - /api/shoppingcart/
 - /api/order/
 
 **Usage**
 
 - Go to http://localhost:8000/admin/ and log in using your account. Add some car parts from the admin menu, then go to the carparts API endpoint to see them.
-- Go to the carparts/<id> endpoint to see the details about a specific item.
+- Go to the carparts/id endpoint to see the details about a specific item.
 - To add items to your shopping cart, go to the shopping cart items section in the admin menu and add the desired amount of items. Then go to the shoppingcart API endpoint to see all the items in the shopping cart
 - To place an order, go to the Orders section in the admin menu and select all the items you want to order and select the datetime for delivery. Then go to the shoppingcart API endpoint to see your order.
